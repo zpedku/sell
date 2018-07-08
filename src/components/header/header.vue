@@ -217,7 +217,6 @@
         height 100%
         z-index -1
         filter blur(10px)
-    /*打开优惠详情页*/
     .detail
         position fixed
         z-index 100
