@@ -42,7 +42,6 @@
                                     <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                                 </div>
                             </div>
-                            <div>233</div>
                         </li>
                     </ul>
                 </li>
