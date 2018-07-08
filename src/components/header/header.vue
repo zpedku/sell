@@ -217,6 +217,7 @@
         height 100%
         z-index -1
         filter blur(10px)
+    /*打开优惠详情页*/
     .detail
         position fixed
         z-index 100
@@ -226,6 +227,7 @@
         height 100%
         overflow auto
         transition: all .5s
+        backdrop-filter blur(10px)
         background-color: rgba(7,17,27,0.8)
         &.fade-enter,&.fade-leave-to
             opacity: 0
