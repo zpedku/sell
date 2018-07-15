@@ -14,12 +14,11 @@ Vue.use(VueResource)
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
-// const Foo = { template: '<div>foo</div>' }
 const routes = [
     { path: '/goods', component: goods },
     { path: '/ranting', component: ratings },
-    { path: '/seller', component: seller }
+    { path: '/seller', component: seller },
+    {path: '/', redirect: '/goods'}
 ]
 const router = new VueRouter({
     routes // (缩写) 相当于 routes: routes
