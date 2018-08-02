@@ -3,9 +3,9 @@
         <div class="menu-wrapper" ref="menuWrapper">
             <ul>
                 <li class="menu-item"
-                    v-for ="(item,index) in goods"
+                    v-for="(item,index) in goods"
                     :key="index"
-                    :class = "{'current':currentIndex===index}"
+                    :class="{'current':currentIndex===index}"
                     @click="selectMenu(index,$event)"
                 >
                 <span class="text border-1px">
@@ -26,11 +26,11 @@
                     v-for="(item , index) in goods"
                     :key="index"
                 >
-                <h1 class="title">{{item.name}}</h1>
+                    <h1 class="title">{{item.name}}</h1>
                     <ul>
                         <li class="food-item"
-                         v-for="(food,idx) in item.foods"
-                         :key="idx"
+                            v-for="(food,idx) in item.foods"
+                            :key="idx"
                         >
                             <div class="icon"><img :src="food.icon" width="57" height="57"></div>
                             <div class="content">
@@ -42,22 +42,37 @@
                                 <div class="price">
                                     <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                                 </div>
+                                <div class="cartcontrol-wrapper">
+                                    <cartctrol :food="food"></cartctrol>
+                                </div>
                             </div>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <shopcart></shopcart>
+        <shopcart
+            :select-foods="selectFoods"
+            :delivery-price="seller.deliveryPrice"
+            :min-price="seller.minPrice"
+        >
+        </shopcart>
     </div>
 </template>
-
+<!--:select-foods="selectFoods"-->
 <script>
     import BScroll from 'better-scroll'
     import shopcart from '../shopcart/shopcart'
+    import cartctrol from '../cartcontrol/cartcontrol'
+
     const ERR_OK = 0
     export default {
         name: 'goods',
+        props: {
+            seller: {
+                type: Object
+            }
+        },
         data () {
             return {
                 goods: [],
@@ -66,17 +81,28 @@
             }
         },
         computed: {
-          currentIndex () {
-              for (let i = 0; i < this.listHeight.length; i++) {
-                  let height1 = this.listHeight[i]
-                  let height2 = this.listHeight[i + 1]
-                  if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
-                      // console.log('i: ${}', i)
-                      return i
-                  }
-              }
-              return 0
-          }
+            currentIndex () {
+                for (let i = 0; i < this.listHeight.length; i++) {
+                    let height1 = this.listHeight[i]
+                    let height2 = this.listHeight[i + 1]
+                    if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+                        // console.log('i: ${}', i)
+                        return i
+                    }
+                }
+                return 0
+            },
+            selectFoods () {
+                let foods = []
+                this.goods.forEach((good) => {
+                      good.foods.forEach((food) => {
+                        if (food.count) {
+                           foods.push(food)
+                        }
+                      })
+                })
+                return foods
+            }
         },
         created () {
             this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
@@ -125,11 +151,12 @@
                     height += foodList[i].clientHeight
                     this.listHeight.push(height)
                 })
-                 // console.log(this.listHeight)
+                // console.log(this.listHeight)
             }
         },
         components: {
-            shopcart
+            shopcart,
+            cartctrol
         }
     }
 </script>
@@ -183,7 +210,7 @@
                     display table-cell
                     width 56px
                     vertical-align middle
-                    border-1px(rgba(7, 17,27,0.1))
+                    border-1px(rgba(7, 17, 27, 0.1))
                     font-size 12px
         .foods-wrapper
             flex 1
@@ -199,10 +226,11 @@
                 display flex
                 margin 18px
                 padding-bottom 18px
-                border-1px(rgba(7,17,27,0.1))
+                border-1px(rgba(7, 17, 27, 0.1))
                 &:last-child
                     margin-bottom 0
-                    border-none() /*这是是把最后一个元素的伪元素下划线设置为none */
+                    border-none()
+                /*这是是把最后一个元素的伪元素下划线设置为none */
                 .icon
                     flex 0 0 57px
                     margin-right 10px
@@ -218,7 +246,7 @@
                         margin-bottom 8px
                         line-height 10px
                         font-size 10px
-                        color rgb(147,153,159)
+                        color rgb(147, 153, 159)
                     .desc
                         line-height 12px;
                         margin 8px
@@ -236,4 +264,8 @@
                             text-decoration: line-through
                             font-size: 10px
                             color: rgb(147, 153, 159)
+                    .cartcontrol-wrapper
+                        position absolute
+                        right 0
+                        bottom 12px
 </style>

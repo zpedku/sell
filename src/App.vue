@@ -15,7 +15,7 @@
       </div>
       <!--路由出口-->
       <!--路由匹配的组件将显示在这里-->
-      <router-view></router-view>
+      <router-view :seller="seller" keep-alive></router-view>
   </div>
 </template>
 
