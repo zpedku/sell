@@ -27,9 +27,11 @@
         } else {
           this.food.count += 1
         }
+        this.$emit('drop', event.target)
       },
       decreaseCart () {
-        this.food.count--
+              if (this.food.count === 0) return
+              this.food.count -= 1
       }
     }
   }

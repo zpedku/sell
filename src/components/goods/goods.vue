@@ -43,7 +43,7 @@
                                     <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                                 </div>
                                 <div class="cartcontrol-wrapper">
-                                    <cartctrol :food="food"></cartctrol>
+                                    <cartctrol :food="food" @drop="_drop"></cartctrol>
                                 </div>
                             </div>
                         </li>
@@ -51,7 +51,7 @@
                 </li>
             </ul>
         </div>
-        <shopcart
+        <shopcart ref="shopcart"
             :select-foods="selectFoods"
             :delivery-price="seller.deliveryPrice"
             :min-price="seller.minPrice"
@@ -127,6 +127,11 @@
                 let foodList = this.$refs.foodListHook
                 let el = foodList[index]
                 this.foodsScroll.scrollToElement(el, 300)
+            },
+            _drop (target) {
+                this.$nextTick(() => {
+                    this.$refs.shopcart.drop(target)
+                })
             },
             /* 初始化滚动容器 */
             _initScroll () {
