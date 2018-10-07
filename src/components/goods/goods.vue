@@ -31,6 +31,7 @@
                         <li class="food-item"
                             v-for="(food,idx) in item.foods"
                             :key="idx"
+                            @click="selectFood(food,$event)"
                         >
                             <div class="icon"><img :src="food.icon" width="57" height="57"></div>
                             <div class="content">
@@ -57,12 +58,14 @@
             :min-price="seller.minPrice"
         >
         </shopcart>
+       <!-- TODO 存在多层传递,不是理想方法,暂用-->
+        <food :food="selectedFood" ref="food" @drop="_drop"></food>
     </div>
 </template>
-<!--:select-foods="selectFoods"-->
 <script>
     import BScroll from 'better-scroll'
     import shopcart from '../shopcart/shopcart'
+    import food from '../food/food'
     import cartctrol from '../cartcontrol/cartcontrol'
 
     const ERR_OK = 0
@@ -77,7 +80,8 @@
             return {
                 goods: [],
                 listHeight: [],
-                scrollY: 0
+                scrollY: 0,
+                selectedFood: {}
             }
         },
         computed: {
@@ -128,6 +132,10 @@
                 let el = foodList[index]
                 this.foodsScroll.scrollToElement(el, 300)
             },
+            selectFood (food, event) {
+                this.selectedFood = food
+                this.$refs.food.show()
+            },
             _drop (target) {
                 this.$nextTick(() => {
                     this.$refs.shopcart.drop(target)
@@ -161,7 +169,8 @@
         },
         components: {
             shopcart,
-            cartctrol
+            cartctrol,
+            food
         }
     }
 </script>
